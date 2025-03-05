@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Mylibraryapp</string>
+    <string name="btn">Button</string>
 </resources>
