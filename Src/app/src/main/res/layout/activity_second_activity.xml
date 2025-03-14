@@ -76,7 +76,6 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#FF9800"
         android:elevation="8dp"
-        android:onClick="Rate Books"
         android:paddingVertical="12dp"
         android:text="Rate Books"
         android:textColor="#FFFFFF"
