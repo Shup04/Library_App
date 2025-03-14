@@ -1,6 +1,11 @@
 package com.example.mylibraryapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +25,23 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Set button click listener
+        Button login_button = findViewById(R.id.login_button);
+        login_button.setOnClickListener(this::LoginMsg);
+    }
+
+    public void LoginMsg(View view) {
+        TextView txtUid = findViewById(R.id.etxtUid);
+
+        if (txtUid.getText().length() > 0) {
+            Toast.makeText(this, "Login was successful!", Toast.LENGTH_LONG).show();
+
+            // Move to the next activity
+            Intent intent = new Intent(this, SecondActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Empty! Please enter something.", Toast.LENGTH_LONG).show();
+        }
     }
 }

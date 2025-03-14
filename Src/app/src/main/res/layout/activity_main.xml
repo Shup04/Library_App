@@ -11,23 +11,22 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="125dp"
-        android:layout_height="37dp"
-        android:background="@drawable/textback"
+        android:id="@+id/Login_textView"
+        android:layout_width="223dp"
+        android:layout_height="72dp"
         android:text=" My library"
-        android:textColor="#1F211B"
+        android:textColor="#FFFFFF"
         android:textColorLink="#524747"
-        android:textSize="25sp"
+        android:textSize="45dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.249" />
+        app:layout_constraintVertical_bias="0.244" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/login_button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_change"
@@ -40,5 +39,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.84" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/book_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.133">
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/etxtUid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="529dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
