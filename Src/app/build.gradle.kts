@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -39,9 +40,12 @@ dependencies {
     implementation(libs.constraintlayout)
 
     implementation("com.android.volley:volley:1.2.1")
-
+    implementation ("com.squareup.picasso:picasso:2.71828")
+    implementation ("com.google.firebase:firebase-database:21.0.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
+
+apply(plugin = "com.google.gms.google-services")
