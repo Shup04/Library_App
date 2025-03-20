@@ -32,16 +32,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void LoginMsg(View view) {
-        TextView txtUid = findViewById(R.id.etxtUid);
+        Toast.makeText(this, "Login was successful!", Toast.LENGTH_LONG).show();
 
-        if (txtUid.getText().length() > 0) {
-            Toast.makeText(this, "Login was successful!", Toast.LENGTH_LONG).show();
-
-            // Move to the next activity
-            Intent intent = new Intent(this, SecondActivity.class);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Empty! Please enter something.", Toast.LENGTH_LONG).show();
-        }
+        // Move to the next activity
+        Intent intent = new Intent(this, SecondActivity.class);
+        startActivity(intent);
     }
 }

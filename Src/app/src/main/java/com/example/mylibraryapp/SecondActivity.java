@@ -46,9 +46,16 @@ public class SecondActivity extends AppCompatActivity {
         // Start with a default query, e.g. "android"
         searchBooks("android");
 
-        // Button to move to another activity
-        Button rateBooksButton = findViewById(R.id.rate_books_button);
-        rateBooksButton.setOnClickListener(this::rateBooks);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Book selectedBook = bookList.get(position);
+            Intent intent = new Intent(SecondActivity.this, BookDetailActivity.class);
+            intent.putExtra("bookTitle", selectedBook.getTitle());
+            intent.putExtra("bookAuthor", selectedBook.getAuthor());
+            intent.putExtra("coverId", selectedBook.getCoverId());
+            intent.putExtra("currentRating", (float) selectedBook.getRating());
+            startActivity(intent);
+        });
+
     }
 
     public void searchBooks(String query) {

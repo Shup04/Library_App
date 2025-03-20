@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,20 +66,23 @@ public class BookAdapter extends ArrayAdapter<Book> {
         // Query Firebase for the rating (assumes ratings are stored under "ratings/<bookTitle>")
         ratingsRef.child(book.getTitle()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    Double ratingValue = snapshot.getValue(Double.class);
-                    if(ratingValue != null){
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Retrieve the whole BookRating object
+                    BookRating ratingObject = snapshot.getValue(BookRating.class);
+                    if (ratingObject != null) {
+                        float ratingValue = ratingObject.getRating();
                         book.setRating(ratingValue);
-                        ratingBar.setRating(ratingValue.floatValue());
+                        ratingBar.setRating(ratingValue);
                     }
                 }
             }
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Optionally handle errors here
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error if needed
             }
         });
+
 
         return itemView;
     }
