@@ -42,6 +42,15 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1")
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation ("com.google.firebase:firebase-database:21.0.0")
+    implementation(libs.firebase.auth)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services.auth)
+    implementation(libs.googleid)
+
+    implementation ("com.google.firebase:firebase-auth:23.2.0")
+    implementation ("androidx.credentials:credentials:1.5.0-rc01")
+    implementation ("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

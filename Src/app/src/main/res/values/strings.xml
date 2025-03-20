@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Mylibraryapp</string>
     <string name="btn">Button</string>
+    <string name="default_web_client_id">271121049683-771i0sm7hkctppm5ao6t16f2gv5fmfnr.apps.googleusercontent.com</string>
 </resources>
