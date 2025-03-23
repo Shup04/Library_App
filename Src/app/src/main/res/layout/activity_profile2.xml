@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/img"
+    tools:context=".ProfileActivity">
+
+    <!-- Example Image at top -->
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="200dp"
+        android:layout_height="172dp"
+        android:layout_marginTop="40dp"
+        app:srcCompat="@drawable/ic_launcher_foreground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <!-- TextView that changes when rating history or new username is submitted -->
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome, user!"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/imageView4"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- "Edit Profile" Button -->
+    <Button
+        android:id="@+id/btnEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- "Rating History" Button -->
+    <Button
+        android:id="@+id/btnRatingHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating History"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/btnEditProfile"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- EditText for new username (Hidden by default) -->
+    <EditText
+        android:id="@+id/editTextUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter new username"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        android:layout_marginHorizontal="40dp"
+        android:padding="10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/btnRatingHistory"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp" />
+
+    <!-- Submit button (Hidden by default) -->
+    <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/editTextUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- "Back" Button (NEW) -->
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

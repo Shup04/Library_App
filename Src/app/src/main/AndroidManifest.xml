@@ -14,16 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mylibraryapp"
         tools:targetApi="31">
-
+        <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".BookDetailActivity" />
-
-        <activity android:name=".thirdpage"
-            android:launchMode="singleTop"/>
-
         <activity
             android:name=".SecondActivity"
             android:exported="false" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -33,7 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

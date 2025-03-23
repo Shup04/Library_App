@@ -3,13 +3,15 @@ package com.example.mylibraryapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;            // ADDED
+import android.view.MenuItem;      // ADDED
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;  // ADDED FOR TOOLBAR
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,7 +31,7 @@ import java.util.ArrayList;
 public class SecondActivity extends AppCompatActivity {
 
     private ListView listView;
-    private BookAdapter adapter;
+    private BookAdapter adapter;    // from your existing code
     private ArrayList<Book> bookList;
 
     @Override
@@ -37,15 +39,20 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second_activity);
 
-        // Initialize the ListView and adapter
+        // 1) Use Toolbar as the ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // 2) Setup your ListView + BookAdapter (unchanged)
         listView = findViewById(R.id.listView);
         bookList = new ArrayList<>();
         adapter = new BookAdapter(this, bookList);
         listView.setAdapter(adapter);
 
-        // Start with a default query, e.g. "android"
+        // 3) Default query
         searchBooks("android");
 
+        // 4) OnItemClick logic for your list
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Book selectedBook = bookList.get(position);
             Intent intent = new Intent(SecondActivity.this, BookDetailActivity.class);
@@ -55,44 +62,36 @@ public class SecondActivity extends AppCompatActivity {
             intent.putExtra("currentRating", (float) selectedBook.getRating());
             startActivity(intent);
         });
-
     }
 
+    // 5) The search logic
     public void searchBooks(String query) {
         try {
             String encodedQuery = URLEncoder.encode(query, "UTF-8");
-            // Use HTTPS to avoid cleartext traffic issues:
             String url = "https://openlibrary.org/search.json?q=" + encodedQuery;
 
             RequestQueue queue = Volley.newRequestQueue(this);
-
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                // Clear previous results
                                 bookList.clear();
                                 JSONArray docsArray = response.getJSONArray("docs");
                                 for (int i = 0; i < docsArray.length(); i++) {
                                     JSONObject bookObject = docsArray.getJSONObject(i);
                                     String title = bookObject.optString("title");
 
-                                    // Get the first author if available
                                     String author = "Unknown Author";
                                     JSONArray authorArray = bookObject.optJSONArray("author_name");
                                     if (authorArray != null && authorArray.length() > 0) {
                                         author = authorArray.getString(0);
                                     }
 
-                                    // Get cover id if available; if not, it remains 0
                                     int coverId = bookObject.has("cover_i") ? bookObject.optInt("cover_i") : 0;
-
-                                    // Create a new Book object and add to the list
                                     Book book = new Book(title, author, coverId);
                                     bookList.add(book);
                                 }
-                                // Refresh the adapter
                                 adapter.notifyDataSetChanged();
                             } catch (JSONException e) {
                                 Log.e("searchBooks", "JSON Parsing error: " + e.getMessage());
@@ -104,14 +103,12 @@ public class SecondActivity extends AppCompatActivity {
                     Log.e("searchBooks", "Error: " + error.toString());
                 }
             });
-
             queue.add(request);
         } catch (UnsupportedEncodingException e) {
             Log.e("searchBooks", "Encoding error: " + e.getMessage());
         }
     }
 
-    // This method is linked via XML or can be set programmatically
     public void performSearch(View view) {
         EditText searchInput = findViewById(R.id.search_input);
         String searchText = searchInput.getText().toString().trim();
@@ -123,8 +120,23 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 
-    public void rateBooks(View view) {
-        Intent intent = new Intent(this, thirdpage.class);
-        startActivity(intent);
+    // 6) Menu code: inflate + handle item
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // main_menu.xml
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_profile) {
+            // e.g., open a Profile page
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

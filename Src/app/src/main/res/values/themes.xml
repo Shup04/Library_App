@@ -1,9 +1,18 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 1) Base Theme with NoActionBar -->
     <style name="Base.Theme.Mylibraryapp" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- You can add custom attributes here if you want. -->
     </style>
 
+    <!-- 2) Actual app theme referencing Base -->
     <style name="Theme.Mylibraryapp" parent="Base.Theme.Mylibraryapp" />
+
+    <!-- 3) Dark popup theme for the overflow menu -->
+    <style name="BlackOverflowMenu" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:popupBackground">@android:color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>
