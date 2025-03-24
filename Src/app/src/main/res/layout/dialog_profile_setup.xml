@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Input field for username -->
+    <EditText
+        android:id="@+id/username_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter username" />
+
+    <!-- Display for the profile image -->
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:contentDescription="Profile image" />
+
+    <!-- Button to select a profile image -->
+    <Button
+        android:id="@+id/select_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Profile Image"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

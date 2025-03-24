@@ -14,12 +14,12 @@
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="#D0000000"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/BlackOverflowMenu"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/BlackOverflowMenu" />
 
     <!-- Example: CardView with an EditText for searching -->
     <androidx.cardview.widget.CardView
@@ -38,12 +38,12 @@
             android:id="@+id/search_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:hint="Enter book title or keyword..."
-            android:padding="15dp"
-            android:textColor="#000000"
-            android:textColorHint="#888888"
-            android:textSize="18sp" />
+            android:background="#80000000"
+        android:hint="Enter book title or keyword..."
+        android:padding="15dp"
+        android:textColor="#FFFFFF"   
+        android:textColorHint="#FFFFFF"
+        android:textSize="18sp" />
     </androidx.cardview.widget.CardView>
 
     <!-- Example: A "Search" Button -->
