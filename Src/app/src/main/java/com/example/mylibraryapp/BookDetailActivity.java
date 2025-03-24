@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -74,8 +76,15 @@ public class BookDetailActivity extends AppCompatActivity {
             return;
         }
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String userId = currentUser.getUid();
+
         // Create a BookRating object and store it in Firebase
-        BookRating rating = new BookRating(bookTitle, textViewAuthor.getText().toString(), newRating, suggestion);
+        BookRating rating = new BookRating(bookTitle, textViewAuthor.getText().toString(), newRating, suggestion, userId);
         // Save under the key 'bookTitle' (or use push() to generate a unique key if you want to keep history)
         ratingsRef.setValue(rating)
                 .addOnSuccessListener(aVoid -> {
