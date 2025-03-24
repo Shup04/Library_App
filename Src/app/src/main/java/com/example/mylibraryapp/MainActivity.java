@@ -24,6 +24,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,6 +79,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private String copyImageToInternalStorage(Uri imageUri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+            File file = new File(getFilesDir(), "profile_image.jpg"); // For simplicity, using a fixed name
+            OutputStream outputStream = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+            outputStream.close();
+            inputStream.close();
+            return file.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     private void showProfileDialog() {
         // Inflate your dialog layout
@@ -104,16 +128,22 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Username cannot be empty", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        // Use the selected image URI if one was chosen; otherwise, use a default placeholder value.
-                        String profilePicUrl = (selectedImageUri != null) ? selectedImageUri.toString() : "default_profile_pic_url";
 
+                        // If an image was selected, copy it to internal storage.
+                        String profilePicPath = "default_profile_pic_path"; // Use a default if needed.
+                        if (selectedImageUri != null) {
+                            String localPath = copyImageToInternalStorage(selectedImageUri);
+                            if (localPath != null) {
+                                profilePicPath = localPath;
+                            }
+                        }
                         // Save the profile info to Firebase Realtime Database
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         if (user != null) {
                             String uid = user.getUid();
                             Map<String, Object> userData = new HashMap<>();
                             userData.put("username", username);
-                            userData.put("profilePicUrl", profilePicUrl);
+                            userData.put("profilePicUrl", profilePicPath);
                             FirebaseDatabase.getInstance().getReference("users").child(uid).setValue(userData)
                                     .addOnCompleteListener(task -> {
                                         if (task.isSuccessful()) {
