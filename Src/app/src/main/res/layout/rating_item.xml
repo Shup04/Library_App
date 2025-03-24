@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <!-- Book Title -->
+    <TextView
+        android:id="@+id/book_title_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Book Title"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Book Author -->
+    <TextView
+        android:id="@+id/book_author_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Author"
+        app:layout_constraintTop_toBottomOf="@id/book_title_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Rating Value -->
+    <TextView
+        android:id="@+id/rating_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating: 4.5"
+        app:layout_constraintTop_toBottomOf="@id/book_author_tv"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Suggestion / Review -->
+    <TextView
+        android:id="@+id/suggestion_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Great book!"
+        app:layout_constraintTop_toBottomOf="@id/rating_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,7 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
         // 1. Find views
         usernameTextView = findViewById(R.id.textView);
         btnEditProfile = findViewById(R.id.btnEditProfile);
-        btnRatingHistory = findViewById(R.id.btnRatingHistory);
+        //btnRatingHistory = findViewById(R.id.btnRatingHistory);
         editTextUsername = findViewById(R.id.editTextUsername);
         buttonSubmit = findViewById(R.id.buttonSubmit);
         profileImageView = findViewById(R.id.imageView4);
@@ -107,14 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
                 usernameTextView.setText("Enter your new username below, then tap Submit");
             }
         });
-
-        // 4. "Rating History" button sets the TextView
-        btnRatingHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                usernameTextView.setText("Put history here");
-            }
-        });
+        
 
         // 5. "Submit" button updates username
         buttonSubmit.setOnClickListener(new View.OnClickListener() {

@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     // Global reference for the ImageView inside the profile setup dialog
     private ImageView profileImageView;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +114,11 @@ public class MainActivity extends AppCompatActivity {
         // Set up button for image selection
         selectImageButton.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            // Add flags to grant persistent read permission.
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
+
 
         // Build and show the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -168,10 +173,18 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             selectedImageUri = data.getData();
-            // Update the dialog's ImageView preview if available
+            // Persist the permission
+            final int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            try {
+                getContentResolver().takePersistableUriPermission(selectedImageUri, takeFlags);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+            // Update the preview (if the ImageView is still visible)
             if (profileImageView != null && selectedImageUri != null) {
                 profileImageView.setImageURI(selectedImageUri);
             }
         }
     }
+
 }
