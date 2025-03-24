@@ -3,6 +3,7 @@ package com.example.mylibraryapp;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,9 +30,10 @@ public class BookRatingAdapter extends RecyclerView.Adapter<BookRatingAdapter.Ra
         BookRating rating = ratingList.get(position);
         holder.bookTitleTv.setText(rating.getBookTitle());
         holder.bookAuthorTv.setText(rating.getBookAuthor());
-        holder.ratingTv.setText("Rating: " + rating.getRating());
+        holder.ratingBar.setRating(rating.getRating());  // Set the star rating
         holder.suggestionTv.setText(rating.getSuggestion());
     }
+
 
     @Override
     public int getItemCount() {
@@ -40,12 +42,13 @@ public class BookRatingAdapter extends RecyclerView.Adapter<BookRatingAdapter.Ra
 
     public static class RatingViewHolder extends RecyclerView.ViewHolder {
         TextView bookTitleTv, bookAuthorTv, ratingTv, suggestionTv;
+        RatingBar ratingBar;
         public RatingViewHolder(@NonNull View itemView) {
             super(itemView);
             bookTitleTv = itemView.findViewById(R.id.book_title_tv);
             bookAuthorTv = itemView.findViewById(R.id.book_author_tv);
-            ratingTv = itemView.findViewById(R.id.rating_tv);
             suggestionTv = itemView.findViewById(R.id.suggestion_tv);
+            ratingBar = itemView.findViewById(R.id.rating_bar);
         }
     }
 }

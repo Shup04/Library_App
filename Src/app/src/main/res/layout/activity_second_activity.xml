@@ -2,51 +2,53 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondActivity"
-    android:background="@drawable/secoundpageback">
+    android:background="@drawable/secoundpageback"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".SecondActivity">
 
-    <!-- 1) Custom Toolbar at top with black popup theme -->
+    <!-- Custom Toolbar at top -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="#D0000000"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:popupTheme="@style/BlackOverflowMenu" />
 
-    <!-- Example: CardView with an EditText for searching -->
+    <!-- CardView containing the EditText with a transparent black background -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="6dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/search_button">
 
         <EditText
             android:id="@+id/search_input"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#80000000"
-        android:hint="Enter book title or keyword..."
-        android:padding="15dp"
-        android:textColor="#FFFFFF"   
-        android:textColorHint="#FFFFFF"
-        android:textSize="18sp" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/dark_glass_edittext"
+            android:hint="Enter book title or keyword..."
+            android:padding="15dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textSize="18sp" />
     </androidx.cardview.widget.CardView>
 
-    <!-- Example: A "Search" Button -->
+    <!-- Search Button -->
     <Button
         android:id="@+id/search_button"
         android:layout_width="200dp"
@@ -59,10 +61,10 @@
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@id/cardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:onClick="performSearch" />
+        android:onClick="performSearch"/>
 
     <!-- Example: ListView for results -->
     <ListView
