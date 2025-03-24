@@ -1,7 +1,7 @@
 package com.example.mylibraryapp;
 
-import android.content.Intent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,13 +12,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,11 +30,13 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri selectedImageUri;
+    // Global reference for the ImageView inside the profile setup dialog
+    private ImageView profileImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // Your main layout with login_button
+        setContentView(R.layout.activity_main);
 
         Button loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(this::loginMsg);
@@ -42,29 +48,50 @@ public class MainActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 FirebaseUser user = auth.getCurrentUser();
                 Toast.makeText(MainActivity.this, "Login was successful!", Toast.LENGTH_SHORT).show();
-                // Show the profile setup dialog
-                showProfileDialog();
+                // Check if the profile exists in the database.
+                String uid = user.getUid();
+                FirebaseDatabase.getInstance().getReference("users").child(uid)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    // Profile exists; go directly to the next activity.
+                                    startActivity(new Intent(MainActivity.this, SecondActivity.class));
+                                    finish();
+                                } else {
+                                    // Profile doesn't exist; show the profile setup dialog.
+                                    showProfileDialog();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(MainActivity.this, "Database error.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             } else {
                 Toast.makeText(MainActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+
     private void showProfileDialog() {
-        // Inflate the custom layout for profile setup
+        // Inflate your dialog layout
         LayoutInflater inflater = LayoutInflater.from(this);
         View dialogView = inflater.inflate(R.layout.dialog_profile_setup, null);
+
+        // Get the references from the dialog layout
         EditText usernameEt = dialogView.findViewById(R.id.username_et);
-        ImageView profileImageView = dialogView.findViewById(R.id.profile_image);
+        profileImageView = dialogView.findViewById(R.id.profile_image);  // Save the reference globally
         Button selectImageButton = dialogView.findViewById(R.id.select_image_button);
 
-        // When the user taps "Select Profile Image", launch an image picker
+        // Set up button for image selection
         selectImageButton.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
 
-        // Build the dialog
+        // Build and show the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView)
                 .setTitle("Set up your profile")
@@ -111,7 +138,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             selectedImageUri = data.getData();
-            // Optionally, you can update an ImageView in the dialog to show the selected image.
+            // Update the dialog's ImageView preview if available
+            if (profileImageView != null && selectedImageUri != null) {
+                profileImageView.setImageURI(selectedImageUri);
+            }
         }
     }
 }
