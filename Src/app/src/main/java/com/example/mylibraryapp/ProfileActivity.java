@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,9 +21,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -39,6 +44,11 @@ public class ProfileActivity extends AppCompatActivity {
     private String currentUsername;
     private String currentProfilePicUrl;
 
+    // For displaying users ratings
+    private RecyclerView ratingsRecyclerView;
+    private BookRatingAdapter adapter;
+    private List<BookRating> ratingList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +61,14 @@ public class ProfileActivity extends AppCompatActivity {
         editTextUsername = findViewById(R.id.editTextUsername);
         buttonSubmit = findViewById(R.id.buttonSubmit);
         profileImageView = findViewById(R.id.imageView4);
+
+        // Set up RecyclerView
+        ratingsRecyclerView = findViewById(R.id.ratings_recycler_view);
+        ratingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new BookRatingAdapter(ratingList);
+        ratingsRecyclerView.setAdapter(adapter);
+
+        loadUserRatings();
 
 
 
@@ -107,7 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
                 usernameTextView.setText("Enter your new username below, then tap Submit");
             }
         });
-        
+
 
         // 5. "Submit" button updates username
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
@@ -123,5 +141,34 @@ public class ProfileActivity extends AppCompatActivity {
                 buttonSubmit.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void loadUserRatings() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String uid = user.getUid();
+            // Reference to your "ratings" node
+            DatabaseReference ratingsRef = FirebaseDatabase.getInstance().getReference("ratings");
+            // Query for ratings with matching userId
+            Query query = ratingsRef.orderByChild("userId").equalTo(uid);
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    ratingList.clear();
+                    for (DataSnapshot ratingSnapshot : snapshot.getChildren()) {
+                        BookRating rating = ratingSnapshot.getValue(BookRating.class);
+                        if (rating != null) {
+                            ratingList.add(rating);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(ProfileActivity.this, "Failed to load ratings", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }
