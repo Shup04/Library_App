@@ -1,11 +1,27 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+val openaiApiKey = localProperties.getProperty("OPENAI_API_KEY", "")
+
 android {
+    buildFeatures {
+        buildConfig = true
+    }
     namespace = "com.example.mylibraryapp"
     compileSdk = 35
+
+
+
 
     defaultConfig {
         applicationId = "com.example.mylibraryapp"
@@ -15,6 +31,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "OPENAI_API_KEY", "\"$openaiApiKey\"")
     }
 
     buildTypes {
@@ -55,6 +72,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
 }
 
 apply(plugin = "com.google.gms.google-services")

@@ -1,5 +1,6 @@
 package com.example.mylibraryapp;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Uri selectedImageUri;
 
     private TextView usernameTextView;
-    private Button btnEditProfile, btnRatingHistory, btnBack;
+    private Button btnEditProfile, btnRatingHistory, btnBack, btnReccomendation;
     private EditText editTextUsername;
     private Button buttonSubmit;
     private ImageView profileImageView;
@@ -113,6 +114,17 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Return to the previous page (SecondActivity)
                 finish();
+            }
+        });
+
+        // go to reccomendations screen
+        btnReccomendation = findViewById(R.id.btnReccomendation);
+        btnReccomendation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Return to the previous page (SecondActivity)
+                Intent intent = new Intent(ProfileActivity.this, RecommendationActivity.class);
+                startActivity(intent);
             }
         });
 
