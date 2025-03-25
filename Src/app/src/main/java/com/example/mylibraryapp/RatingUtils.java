@@ -7,35 +7,28 @@ import com.google.firebase.database.*;
 
 public class RatingUtils {
 
-    public static Task<String> getUserRatingsSummary() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            return com.google.android.gms.tasks.Tasks.forResult("No user logged in.");
-        }
-        String uid = user.getUid();
+    public static Task<String> getAllRatingsAsString() {
         DatabaseReference ratingsRef = FirebaseDatabase.getInstance().getReference("ratings");
-        Query query = ratingsRef.orderByChild("userId").equalTo(uid);
-
-        // Fetch the ratings and build the summary string.
-        return query.get().continueWith(task -> {
+        return ratingsRef.get().continueWith(task -> {
             DataSnapshot snapshot = task.getResult();
-            StringBuilder summary = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
+            // Loop through all ratings in the "ratings" node.
             for (DataSnapshot ratingSnapshot : snapshot.getChildren()) {
-                String title = ratingSnapshot.child("bookTitle").getValue(String.class);
-                String author = ratingSnapshot.child("bookAuthor").getValue(String.class);
-                Object ratingObj = ratingSnapshot.child("rating").getValue();
-                String ratingStr = (ratingObj != null) ? ratingObj.toString() : "0";
+                String bookTitle = ratingSnapshot.child("bookTitle").getValue(String.class);
+                String bookAuthor = ratingSnapshot.child("bookAuthor").getValue(String.class);
+                Object ratingValue = ratingSnapshot.child("rating").getValue();
                 String suggestion = ratingSnapshot.child("suggestion").getValue(String.class);
-                summary.append(title)
+
+                sb.append(bookTitle)
                         .append(" by ")
-                        .append(author)
+                        .append(bookAuthor)
                         .append(": ")
-                        .append(ratingStr)
+                        .append(ratingValue != null ? ratingValue.toString() : "N/A")
                         .append(" stars; Suggestion: ")
                         .append(suggestion)
                         .append("\n");
             }
-            return summary.toString();
+            return sb.toString();
         });
     }
 }

@@ -8,9 +8,24 @@
     android:background="@drawable/skull"
     tools:context=".RecommendationActivity">
 
-    <!-- Title -->
+    <!-- Page Title -->
+
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/recommendReason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Reason for recommendation here."
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRefreshRec" />
+
+    <TextView
+        android:id="@+id/tvPageTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Book Recommendation"
@@ -22,32 +37,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Recommendation Text -->
-    <TextView
-        android:id="@+id/tvRecommendation"
+    <!-- Container for the recommended book list item -->
+    <LinearLayout
+        android:id="@+id/recommendation_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Your recommended book will appear here."
-        android:textSize="18sp"
-        android:textColor="@android:color/white"
-        android:padding="16dp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/tvPageTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
+        android:layout_margin="16dp"/>
 
     <!-- Refresh Button -->
     <Button
-        android:id="@+id/btnRefresh"
+        android:id="@+id/btnRefreshRec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get New Recommendation"
+        android:text="New Recommendation"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/tvRecommendation"
+        app:layout_constraintTop_toBottomOf="@id/recommendation_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="16dp"/>
 
     <!-- Back Button -->
     <Button
@@ -56,9 +67,9 @@
         android:layout_height="wrap_content"
         android:text="Back"
         android:textSize="18sp"
-        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

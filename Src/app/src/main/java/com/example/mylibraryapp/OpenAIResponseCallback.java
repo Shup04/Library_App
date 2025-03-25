@@ -1,4 +1,6 @@
 package com.example.mylibraryapp;
 
-public class OpenAIResponseCallback {
+public interface OpenAIResponseCallback {
+    void onSuccess(String recommendation);
+    void onFailure(Exception e);
 }
