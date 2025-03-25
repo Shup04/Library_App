@@ -1,6 +1,7 @@
 package com.example.mylibraryapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,8 +25,7 @@ import java.io.IOException;
 public class RecommendationActivity extends AppCompatActivity {
 
     private TextView tvRecommendation;
-    private Button btnRefresh, btnBackRec, btnReccomendations;
-
+    private Button btnRefresh, btnBackRec;
     // Get your API key from BuildConfig (set via local.properties and Gradle)
     private final String apiKey = BuildConfig.OPENAI_API_KEY;
 
@@ -38,23 +38,37 @@ public class RecommendationActivity extends AppCompatActivity {
         btnRefresh = findViewById(R.id.btnRefresh);
         btnBackRec = findViewById(R.id.btnBackRec);
 
-        btnRefresh.setOnClickListener(v -> getRecommendation());
+        btnRefresh.setOnClickListener(v -> getRecommendationFromRatings());
         btnBackRec.setOnClickListener(v -> finish());
 
         // Optionally, fetch a recommendation when the activity starts
-        getRecommendation();
+        getRecommendationFromRatings();
     }
 
-    private void getRecommendation() {
-        // Example ratings summary; replace with actual data as needed.
-        String ratingsSummary = "1984 by George Orwell: 5 stars; The Hobbit by J.R.R. Tolkien: 4 stars.";
+    private void getRecommendationFromRatings() {
+        // Fetch ratings summary from Firebase
+        RatingUtils.getUserRatingsSummary().addOnSuccessListener(ratingsSummary -> {
+            // Use the fetched summary to call OpenAI API
+            getRecommendation(ratingsSummary);
+        }).addOnFailureListener(e ->
+                Toast.makeText(RecommendationActivity.this, "Failed to fetch ratings: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void getRecommendation(String ratingsSummary) {
+        // Build JSON payload using the ratings summary.
+        Log.d("Payload", ratingsSummary);
+        ratingsSummary = ratingsSummary.replace("\"", "'").trim();
+
+        String prompt = "User Ratings:\n"
+                + ratingsSummary
+                + "\nBased on these ratings, please recommend one book from OpenLibrary and return the search URL for that book in the following format: https://openlibrary.org/search.json?title=the+lord+of+the+rings";
 
         String jsonPayload = "{\n" +
                 "  \"model\": \"gpt-4o\",\n" +
                 "  \"messages\": [\n" +
                 "    {\n" +
                 "      \"role\": \"user\",\n" +
-                "      \"content\": \"Based on the following user ratings:\\n" + ratingsSummary + "\\nPlease recommend one book from OpenLibrary that this user might enjoy. Provide the title, author, and a brief description.\"\n" +
+                "      \"content\": \"" + prompt.replace("\n", "\\n").replace("\"", "\\\"") + "\"\n" +
                 "    }\n" +
                 "  ]\n" +
                 "}";
@@ -74,13 +88,15 @@ public class RecommendationActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                runOnUiThread(() -> Toast.makeText(RecommendationActivity.this, "Request failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                runOnUiThread(() ->
+                        Toast.makeText(RecommendationActivity.this, "Request failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    runOnUiThread(() -> Toast.makeText(RecommendationActivity.this, "Unexpected response: " + response, Toast.LENGTH_LONG).show());
+                    runOnUiThread(() ->
+                            Toast.makeText(RecommendationActivity.this, "Unexpected response: " + response, Toast.LENGTH_LONG).show());
                     return;
                 }
                 String responseData = response.body().string();
@@ -94,7 +110,8 @@ public class RecommendationActivity extends AppCompatActivity {
                         runOnUiThread(() -> tvRecommendation.setText(recommendation));
                     }
                 } catch (JSONException e) {
-                    runOnUiThread(() -> Toast.makeText(RecommendationActivity.this, "Parsing error: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                    runOnUiThread(() ->
+                            Toast.makeText(RecommendationActivity.this, "Parsing error: " + e.getMessage(), Toast.LENGTH_LONG).show());
                 }
             }
         });
